@@ -1,7 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser')
-const planController = require('./src/controllers/PlanController');
 const cors = require('cors');
+const planController = require('./src/controllers/PlanController');
 
 const app = express();
 const port = 5000;

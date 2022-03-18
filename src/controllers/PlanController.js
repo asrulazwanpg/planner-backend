@@ -1,20 +1,11 @@
 'use strict';
 
-const express = require('express');
 const { check, validationResult } = require('express-validator');
 const PlanModel = require('../models/PlanModel');
 
-const router = express.Router();
-const planRoute = router.route('/plans');
+const PlanController = {};
 
-const validatePlan = [
-	check('name', 'name must be between 1 and 15 characters').isLength({ min: 1, max: 15 }).trim().escape(),
-	check('isGeneral', 'isGeneral must be a boolean').isBoolean(),
-	check('isSpecialist', 'isSpecialist must be a boolean').isBoolean(),
-	check('isPhysiotheraphy', 'isPhysiotheraphy must be a boolean').isBoolean()
-];
-
-planRoute.get(async (req, res) => {
+PlanController.getAllPlan = async function (req, res) {
 	const result = {
 		success: true,
 		message: 'Successfully get all plan',
@@ -23,9 +14,8 @@ planRoute.get(async (req, res) => {
 
 	try {
 		const plans = await PlanModel.getAll();
-		result.results = plans;
-		console.log(plans)
-		// result.results = plans.map(plan => plan.toPlainObject());
+
+		result.results = plans.map(plan => plan.toPlainObject());
 	}
 	catch (error) {
 		result.success = false;
@@ -35,9 +25,9 @@ planRoute.get(async (req, res) => {
 	}
 
 	res.json(result);
-});
+}
 
-planRoute.post(validatePlan, async (req, res) => {
+PlanController.addPlan = async function (req, res) {
 	const result = {
 		success: true,
 		message: 'Successfully add plan'
@@ -65,6 +55,13 @@ planRoute.post(validatePlan, async (req, res) => {
 	}
 
 	res.json(result);
-});
+}
 
-module.exports = router;
+PlanController.validatePlan = [
+	check('name', 'name must be between 1 and 15 characters').isLength({ min: 1, max: 15 }).trim().escape(),
+	check('isGeneral', 'isGeneral must be a boolean').isBoolean(),
+	check('isSpecialist', 'isSpecialist must be a boolean').isBoolean(),
+	check('isPhysiotheraphy', 'isPhysiotheraphy must be a boolean').isBoolean()
+];
+
+module.exports = PlanController
